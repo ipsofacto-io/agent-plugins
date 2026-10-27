@@ -1,5 +1,7 @@
 # agent-plugins
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ipsofacto-io/agent-plugins/badge)](https://scorecard.dev/viewer/?uri=github.com/ipsofacto-io/agent-plugins)
+
 Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
 
 > Status: skeleton. The marketplace and plugins land in a later change.
