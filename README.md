@@ -1,6 +1,6 @@
 # agent-plugins
 
-Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ergo decisions.
+Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
 
 > Status: skeleton. The marketplace and plugins land in a later change.
 
@@ -14,4 +14,4 @@ Copyright 2026 Luca Bertelli.
 
 ## Contributing
 
-Follow the contributor terms in [ergoprobat/.github](https://github.com/ergoprobat/.github/blob/main/CONTRIBUTING.md). Commits need a `Signed-off-by` trailer (`git commit -s`).
+Follow the contributor terms in [ipsofacto-io/.github](https://github.com/ipsofacto-io/.github/blob/main/CONTRIBUTING.md). Commits need a `Signed-off-by` trailer (`git commit -s`).
