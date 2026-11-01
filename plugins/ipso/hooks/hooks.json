@@ -1,0 +1,42 @@
+{
+  "description": "Check proposed edits against engineering decisions in force, on this machine.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ipso",
+            "args": ["hook", "claude-code"],
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ipso",
+            "args": ["hook", "claude-code"],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ipso",
+            "args": ["hook", "claude-code"],
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

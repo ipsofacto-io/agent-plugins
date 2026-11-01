@@ -1,0 +1,16 @@
+{
+  "name": "ipso",
+  "description": "Plugins that keep AI coding agents within ipso engineering decisions.",
+  "owner": {
+    "name": "ipsofacto-io",
+    "url": "https://github.com/ipsofacto-io"
+  },
+  "plugins": [
+    {
+      "name": "ipso",
+      "source": "./plugins/ipso",
+      "description": "Deny edits that violate engineering decisions in force, and propose new decisions.",
+      "category": "security"
+    }
+  ]
+}

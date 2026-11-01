@@ -1,0 +1,30 @@
+{
+  "name": "ipso",
+  "displayName": "ipso",
+  "version": "0.1.0",
+  "description": "Deny edits that violate engineering decisions in force, and propose new decisions. Evaluation runs on this machine.",
+  "author": {
+    "name": "ipsofacto-io",
+    "url": "https://github.com/ipsofacto-io"
+  },
+  "repository": "https://github.com/ipsofacto-io/agent-plugins",
+  "license": "Apache-2.0",
+  "keywords": ["decisions", "policy", "governance", "hooks"],
+  "userConfig": {
+    "bundle_dir": {
+      "type": "directory",
+      "title": "Signed bundle",
+      "description": "An OCI layout from ipso bundle sign. Leave empty to use the local build from ipso compile."
+    },
+    "bundle_digest": {
+      "type": "string",
+      "title": "Bundle digest",
+      "description": "The sha256:<hex> digest the bundle must have. Required with a signed bundle."
+    },
+    "bundle_key": {
+      "type": "file",
+      "title": "Bundle public key",
+      "description": "The P-256 public key PEM that signed the bundle. Required with a signed bundle."
+    }
+  }
+}
