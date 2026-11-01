@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ipso": {
+      "command": "ipso",
+      "args": ["mcp"]
+    }
+  }
+}
