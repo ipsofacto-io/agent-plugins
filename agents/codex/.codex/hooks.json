@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "ipso hook codex", "timeout": 30 }] }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(Bash|apply_patch)$",
+        "hooks": [{ "type": "command", "command": "ipso hook codex", "timeout": 5 }]
+      }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "ipso hook codex", "timeout": 120 }] }
+    ]
+  }
+}
