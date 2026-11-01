@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [{ "command": "ipso hook cursor sessionStart", "timeout": 30 }],
+    "preToolUse": [{ "command": "ipso hook cursor preToolUse", "matcher": "Write|Delete", "timeout": 5 }],
+    "beforeShellExecution": [{ "command": "ipso hook cursor beforeShellExecution", "timeout": 5 }],
+    "stop": [{ "command": "ipso hook cursor stop", "timeout": 120 }]
+  }
+}

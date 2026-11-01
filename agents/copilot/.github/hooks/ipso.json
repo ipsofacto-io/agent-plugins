@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      { "type": "command", "bash": "ipso hook copilot sessionStart", "powershell": "ipso hook copilot sessionStart", "timeoutSec": 30 }
+    ],
+    "preToolUse": [
+      { "type": "command", "bash": "ipso hook copilot preToolUse", "powershell": "ipso hook copilot preToolUse", "timeoutSec": 5 }
+    ],
+    "agentStop": [
+      { "type": "command", "bash": "ipso hook copilot agentStop", "powershell": "ipso hook copilot agentStop", "timeoutSec": 120 }
+    ]
+  }
+}

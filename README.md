@@ -34,6 +34,19 @@ To use a signed policy bundle instead of the local build, set `bundle_dir`, `bun
 
 A missing `ipso` binary makes the hook fail open with a notice, because Claude Code treats that as a non-blocking error. CI remains the gate. The hook is a guard for a cooperating agent and not a sandbox, so a shell command can hide what it touches.
 
+## Codex, Copilot, Cursor, and Kiro
+
+Each directory under `agents/` holds that agent's hook file at the path it belongs. Copy it into your repository and install `ipso` so it is on `PATH`.
+
+| Agent | File | Before it runs |
+| --- | --- | --- |
+| Codex | `agents/codex/.codex/hooks.json` | Trust the project, and review the hooks with `/hooks` |
+| Copilot | `agents/copilot/.github/hooks/ipso.json` | The cloud agent needs `ipso` from its setup steps, or every tool call stops |
+| Cursor | `agents/cursor/.cursor/hooks.json` | Nothing |
+| Kiro | `agents/kiro/.kiro/hooks/ipso.json` | Nothing |
+
+What each agent can enforce differs, and none of these has run in a live session. [`docs/hooks.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md) has the enforcement level per agent and the PR check that remains the gate. The MCP server setup is in [`docs/mcp.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/mcp.md).
+
 ## License
 
 Apache License, Version 2.0. See [LICENSE](LICENSE).

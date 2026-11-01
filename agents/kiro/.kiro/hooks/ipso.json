@@ -1,0 +1,24 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "ipso-session",
+      "trigger": "SessionStart",
+      "action": { "type": "command", "command": "ipso hook kiro SessionStart" },
+      "timeout": 30
+    },
+    {
+      "name": "ipso-pre-tool",
+      "trigger": "PreToolUse",
+      "matcher": "write|shell",
+      "action": { "type": "command", "command": "ipso hook kiro PreToolUse" },
+      "timeout": 5
+    },
+    {
+      "name": "ipso-stop",
+      "trigger": "Stop",
+      "action": { "type": "command", "command": "ipso hook kiro Stop" },
+      "timeout": 120
+    }
+  ]
+}
