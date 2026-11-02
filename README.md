@@ -4,7 +4,7 @@
 
 Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
 
-> Status: the Claude Code plugin needs `ipso` v0.4.0 or later, which has `ipso hook` and `ipso mcp`. It has been checked with `claude plugin validate` and its hook command has been tested against the documented event format. It has not run in a live Claude Code session.
+> Status: the Claude Code plugin needs `ipso` v0.4.0 or later, which has `ipso hook` and `ipso mcp`. It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
 
 Agent marketplaces install from this repository. It holds the Claude Code marketplace and the install surfaces for the other agents. Plugins call a released CLI and the local MCP server.
 
@@ -45,7 +45,7 @@ Each directory under `agents/` holds that agent's hook file at the path it belon
 | Cursor | `agents/cursor/.cursor/hooks.json` | Nothing |
 | Kiro | `agents/kiro/.kiro/hooks/ipso.json` | Nothing |
 
-What each agent can enforce differs, and none of these has run in a live session. [`docs/hooks.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md) has the enforcement level per agent and the PR check that remains the gate. The MCP server setup is in [`docs/mcp.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/mcp.md).
+What each agent can enforce differs. With v0.4.0, each of these four stopped a violating edit in a live session, and the Copilot cloud agent has not been tried. [`docs/hooks.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md) has the enforcement level per agent and the PR check that remains the gate. The MCP server setup is in [`docs/mcp.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/mcp.md).
 
 ## License
 
