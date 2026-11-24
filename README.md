@@ -4,7 +4,7 @@
 
 Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
 
-> Status: the Claude Code plugin needs `ipso` v0.4.0 or later, which has `ipso hook` and `ipso mcp`. It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
+> Status: `ipso hook` and base `ipso mcp` need `ipso` v0.4.0 or later (`decisions.health`, `decisions.verifiability`, and the `decision-health` skill need `ipso` v0.5.0 or later). It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
 
 Agent marketplaces install from this repository. It holds the Claude Code marketplace and the install surfaces for the other agents. Plugins call a released CLI and the local MCP server.
 

@@ -9,22 +9,23 @@ A decision binds edits only after a person approves it. This skill checks existi
 
 ## When the user asks whether a decision is still valid and respected
 
-1. Call `decisions.health` with `id` (slug or ULID/UUID) when known, or `query` with the topic words (for example `"firewall"`), plus optional `repo` and `env`.
+1. Call `decisions.health` with `ref` (slug or ULID/UUID) when known, or `query` with the topic words (for example `"firewall"`), plus optional `repo` and `env`.
 2. Report **Validity** and **Compliance** separately, never collapsing them into a single status:
-   - **Validity** (`valid`, `needs_review`, `superseded`, `expired`): whether the decision itself still stands in force, its `review_by` date, any successor, and any open `premise_reasons`.
+   - **Validity** (`valid`, `needs_review`, `superseded`, `expired`, `deprecated`): whether the decision itself still stands in force, its `review_by` date, any `superseded_by` successor, and any `open_premise_reasons`.
    - **Compliance** (`compliant`, `violated`, `waived`, `stale`, `unverified`): per-scope adherence, distinguishing the latest CI `change` verdict from the latest `live` infrastructure drift verdict, flagging `stale` checks past `max_age_days`, and noting `AI-generated` (`model_id` and `prompt_version`) whenever a verdict came from `engine: llm`.
 
 ## When proposing a new decision
 
 1. Call `decisions.applicable` with the paths the work touches, and read what is already in force. If an existing decision covers the choice, follow it, and propose a replacement only when it is wrong.
 2. Call `decisions.verifiability` with `title`, `statement`, and optional `context`, `repo`, and `env`:
-   - If `classification` is `ambiguous`, tighten hedging phrases (`where appropriate`, `when possible`, `best effort`) using the returned `suggestions` before proposing, or confirm with the user if human attestation is intended.
-   - Use the returned `candidate_checks` (deterministic templates, `opa`, or `engine: llm` with `allow` and `deny` fixtures) and `candidate_premises` to populate `verification`.
+   - If `classification` is `verifiable`, include the matching `candidate_checks` (deterministic templates, `opa`, or `engine: llm` with `allow` and `deny` fixtures) and `candidate_premises` in `verification`.
+   - If `classification` is `ambiguous`, tighten hedging phrases (`where appropriate`, `when possible`, `best effort`) using the returned `suggestions` and re-check before calling `decisions.propose`.
+   - If `classification` is `human_attestation_only`, stop and ask the user to confirm that the rule is intentionally attestation-only before calling `decisions.propose`.
 3. Call `decisions.propose` with:
    - `title`: a short name for the decision
    - `statement`: what is decided, in one or two plain sentences free of hedging
    - `rationale`: why, and what prompted it, including the denied edit if there was one
-   - `verification`: how a deterministic check, premise probe, or fixture-backed `engine: llm` check proves compliance
+   - `verification`: how a deterministic check, premise probe, fixture-backed `engine: llm` check, or user-confirmed human attestation proves compliance
    - `paths`: globs it should apply to, or leave them out for the whole repository
    - `session_ref`: this session's id, if you know it
 4. Tell the user the proposal reference it returned and that the decision is not in force until a person approves it.
