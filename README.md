@@ -4,7 +4,7 @@
 
 Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
 
-> Status: the Claude Code plugin needs `ipso` v0.4.0 or later, which has `ipso hook` and `ipso mcp`. It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
+> Status: `ipso hook` and base `ipso mcp` need `ipso` v0.4.0 or later (`decisions.health`, `decisions.verifiability`, and the `decision-health` skill need `ipso` v0.5.0 or later). It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
 
 Agent marketplaces install from this repository. It holds the Claude Code marketplace and the install surfaces for the other agents. Plugins call a released CLI and the local MCP server.
 
@@ -25,8 +25,9 @@ claude plugin install ipso@ipso
 | `SessionStart` hook | Runs `ipso compile` for the local build, which git ignores, and states the decisions in force |
 | `PreToolUse` hook on `Edit`, `Write`, `MultiEdit`, `NotebookEdit`, and `Bash` | Evaluates `agent-edit` checks on the proposed content. A violated `block` check denies with a link to the decision. A violated `warn` check asks a person |
 | `Stop` hook | Checks the working tree and gives blocking violations back to the agent once |
-| `propose-decision` skill | Creates a proposal through `decisions.propose`. A person approves it |
-| MCP server | `ipso mcp`, with `decisions.applicable`, `decisions.get`, `checks.evaluate`, and `decisions.propose` |
+| `propose-decision` skill | Checks verifiability with `decisions.verifiability` and creates a proposal through `decisions.propose`. A person approves it |
+| `decision-health` skill | Queries `decisions.health` to report separate Validity and Compliance (CI `change` vs `live` drift, plus `stale` freshness) |
+| MCP server | `ipso mcp`, with `decisions.applicable`, `decisions.get`, `decisions.health`, `decisions.verifiability`, `checks.evaluate`, and `decisions.propose` |
 
 The hook decides on this machine with no LLM and sends nothing anywhere. It gives no answer on a clean edit, so your own permission rules still apply. It only acts in a repository with an `.ipso` directory, so run `ipso init` first.
 
