@@ -5,15 +5,7 @@ description: Propose a new engineering decision for a person to review, checking
 
 # Propose a decision
 
-A decision binds edits only after a person approves it. This skill checks existing decisions, diagnoses verifiability of new wording, and creates a proposal for human approval.
-
-## When checking whether an existing decision is still valid and respected
-
-1. Always pass at least one of `ref` (slug or ULID/UUID) or `query` (topic words such as `"firewall"`), plus optional `repo` and `env`. Do not call `decisions.health` with both `ref` and `query` empty.
-2. Report **Validity** and **Compliance** separately, never collapsing them into a single status:
-   - **Validity** (`valid`, `needs_review`, `superseded`, `expired`, `deprecated`): whether the decision itself still stands in force, its `review_by` date, any `superseded_by` successor, and any `open_premise_reasons`.
-   - **Compliance** (`compliant`, `violated`, `waived`, `stale`, `unverified`): per-scope adherence, distinguishing the latest CI `change` verdict from the latest `live` infrastructure drift verdict, flagging `stale` checks past `max_age_days`, and noting `AI-generated` (`model_id` and `prompt_version`) whenever a verdict came from `engine: llm`.
-3. When `decisions.health` runs against local `ipso mcp` without a control plane connection, stored CI and live verdicts are unavailable (`compliance.state` is `unverified` unless an active checkout waiver applies, and `compliance.note` explains this). State explicitly that stored CI and live verdicts are unavailable locally and recommend `ipso status` or remote MCP rather than treating `unverified` as compliant.
+A decision binds edits only after a person approves it. This skill checks existing decisions, diagnoses verifiability of new wording, and creates a proposal for human approval. When the user asks whether an existing decision is still valid and respected, follow the `decision-health` skill instead so offline local MCP limits on validity and compliance are reported first.
 
 ## When proposing a new decision
 
