@@ -1,18 +1,19 @@
 ---
 name: propose-decision
-description: Propose a new engineering decision for a person to review, checking verifiability first, or answer whether an existing decision is still valid and respected. Use when ipso denies an edit and the decision itself looks wrong or out of date, when the work settles a choice future readers would have to reverse-engineer, when the user asks to record a decision, or when the user asks if a decision is still valid and respected.
+description: Propose a new engineering decision for a person to review, checking verifiability first. Use when ipso denies an edit and the decision itself looks wrong or out of date, when the work settles a choice future readers would have to reverse-engineer, or when the user asks to record a decision. For standalone questions about whether an existing decision is still valid and respected, prefer decision-health.
 ---
 
-# Propose a decision and check decision health
+# Propose a decision
 
-A decision binds edits only after a person approves it. This skill checks existing decisions and their health, diagnoses verifiability of new wording, and creates a proposal for human approval.
+A decision binds edits only after a person approves it. This skill checks existing decisions, diagnoses verifiability of new wording, and creates a proposal for human approval.
 
-## When the user asks whether a decision is still valid and respected
+## When checking whether an existing decision is still valid and respected
 
 1. Call `decisions.health` with `ref` (slug or ULID/UUID) when known, or `query` with the topic words (for example `"firewall"`), plus optional `repo` and `env`.
 2. Report **Validity** and **Compliance** separately, never collapsing them into a single status:
    - **Validity** (`valid`, `needs_review`, `superseded`, `expired`, `deprecated`): whether the decision itself still stands in force, its `review_by` date, any `superseded_by` successor, and any `open_premise_reasons`.
    - **Compliance** (`compliant`, `violated`, `waived`, `stale`, `unverified`): per-scope adherence, distinguishing the latest CI `change` verdict from the latest `live` infrastructure drift verdict, flagging `stale` checks past `max_age_days`, and noting `AI-generated` (`model_id` and `prompt_version`) whenever a verdict came from `engine: llm`.
+3. When `decisions.health` runs against local `ipso mcp` without a control plane connection, stored CI and live verdicts are unavailable (`compliance.state` is `unverified` unless an active checkout waiver applies, and `compliance.note` explains this). State explicitly that stored CI and live verdicts are unavailable locally and recommend `ipso status` or remote MCP rather than treating `unverified` as compliant.
 
 ## When proposing a new decision
 

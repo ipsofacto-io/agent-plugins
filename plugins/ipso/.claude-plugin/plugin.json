@@ -2,7 +2,7 @@
   "name": "ipso",
   "displayName": "ipso",
   "version": "0.1.0",
-  "description": "Deny edits that violate engineering decisions in force, check decision validity and compliance health, and propose verifiable new decisions. Local evaluation runs on this machine.",
+  "description": "Deny edits that violate engineering decisions in force, check decision validity and compliance health, and propose verifiable new decisions. Requires ipso v0.4.0+ on PATH (v0.5.0+ for decisions.health and decisions.verifiability).",
   "author": {
     "name": "ipsofacto-io",
     "url": "https://github.com/ipsofacto-io"
