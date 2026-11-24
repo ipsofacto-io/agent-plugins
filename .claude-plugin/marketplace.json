@@ -9,7 +9,7 @@
     {
       "name": "ipso",
       "source": "./plugins/ipso",
-      "description": "Deny edits that violate engineering decisions in force, and propose new decisions.",
+      "description": "Deny edits that violate engineering decisions in force, check decision validity and compliance health, and propose verifiable new decisions.",
       "category": "security"
     }
   ]

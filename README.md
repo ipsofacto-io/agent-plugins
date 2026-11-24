@@ -25,8 +25,9 @@ claude plugin install ipso@ipso
 | `SessionStart` hook | Runs `ipso compile` for the local build, which git ignores, and states the decisions in force |
 | `PreToolUse` hook on `Edit`, `Write`, `MultiEdit`, `NotebookEdit`, and `Bash` | Evaluates `agent-edit` checks on the proposed content. A violated `block` check denies with a link to the decision. A violated `warn` check asks a person |
 | `Stop` hook | Checks the working tree and gives blocking violations back to the agent once |
-| `propose-decision` skill | Creates a proposal through `decisions.propose`. A person approves it |
-| MCP server | `ipso mcp`, with `decisions.applicable`, `decisions.get`, `checks.evaluate`, and `decisions.propose` |
+| `propose-decision` skill | Checks verifiability with `decisions.verifiability` and creates a proposal through `decisions.propose`. A person approves it |
+| `decision-health` skill | Queries `decisions.health` to report separate Validity and Compliance (CI `change` vs `live` drift, plus `stale` freshness) |
+| MCP server | `ipso mcp`, with `decisions.applicable`, `decisions.get`, `decisions.health`, `decisions.verifiability`, `checks.evaluate`, and `decisions.propose` |
 
 The hook decides on this machine with no LLM and sends nothing anywhere. It gives no answer on a clean edit, so your own permission rules still apply. It only acts in a repository with an `.ipso` directory, so run `ipso init` first.
 

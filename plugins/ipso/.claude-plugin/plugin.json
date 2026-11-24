@@ -2,7 +2,7 @@
   "name": "ipso",
   "displayName": "ipso",
   "version": "0.1.0",
-  "description": "Deny edits that violate engineering decisions in force, and propose new decisions. Evaluation runs on this machine.",
+  "description": "Deny edits that violate engineering decisions in force, check decision validity and compliance health, and propose verifiable new decisions. Local evaluation runs on this machine.",
   "author": {
     "name": "ipsofacto-io",
     "url": "https://github.com/ipsofacto-io"
