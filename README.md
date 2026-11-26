@@ -2,51 +2,55 @@
 
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ipsofacto-io/agent-plugins/badge)](https://scorecard.dev/viewer/?uri=github.com/ipsofacto-io/agent-plugins)
 
-Claude Code, Cursor, Copilot and Kiro plugins that keep AI coding agents within ipso decisions.
+Plugins and hook configurations that keep AI coding agents (Claude Code, Codex, Copilot, Cursor, and Kiro) aligned with your repository's [ipso](https://github.com/ipsofacto-io/ipso) engineering decisions.
 
-> Status: `ipso hook` and base `ipso mcp` need `ipso` v0.4.0 or later (`decisions.health`, `decisions.verifiability`, and the `decision-health` skill need `ipso` v0.5.0 or later). It has been checked with `claude plugin validate`, and with v0.4.0 it denied a violating edit in a live Claude Code session.
-
-Agent marketplaces install from this repository. It holds the Claude Code marketplace and the install surfaces for the other agents. Plugins call a released CLI and the local MCP server.
+> Prerequisites: install the `ipso` CLI on your `PATH` and run `ipso init` in your repository. Base hooks and MCP require `ipso` v0.4.0+; `decisions.health`, `decisions.verifiability`, and the `decision-health` skill require `ipso` v0.5.0+.
 
 ## Claude Code
 
-Install `ipso` so it is on `PATH`, then:
+Add this repository as a marketplace and install the plugin:
 
 ```bash
 claude plugin marketplace add ipsofacto-io/agent-plugins
-```
-
-```bash
 claude plugin install ipso@ipso
 ```
 
-| Part | What it does |
+### What the plugin installs
+
+| Component | What it does |
 | --- | --- |
-| `SessionStart` hook | Runs `ipso compile` for the local build, which git ignores, and states the decisions in force |
-| `PreToolUse` hook on `Edit`, `Write`, `MultiEdit`, `NotebookEdit`, and `Bash` | Evaluates `agent-edit` checks on the proposed content. A violated `block` check denies with a link to the decision. A violated `warn` check asks a person |
-| `Stop` hook | Checks the working tree and gives blocking violations back to the agent once |
-| `propose-decision` skill | Checks verifiability with `decisions.verifiability` and creates a proposal through `decisions.propose`. A person approves it |
+| `SessionStart` hook | Compiles decisions locally into `.ipso/build` (git-ignored) and loads the decisions currently in force |
+| `PreToolUse` hook | Checks proposed edits (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`, `Bash`) against `agent-edit` rules; denies `block` violations with a link to the decision and asks a person on `warn` violations |
+| `Stop` hook | Re-checks the working tree before finishing and feeds blocking violations back to the agent once |
+| `propose-decision` skill | Checks verifiability via `decisions.verifiability` and creates a proposed EDR via `decisions.propose` for human approval |
 | `decision-health` skill | Queries `decisions.health` to report separate Validity and Compliance (CI `change` vs `live` drift, plus `stale` freshness) |
-| MCP server | `ipso mcp`, with `decisions.applicable`, `decisions.get`, `decisions.health`, `decisions.verifiability`, `checks.evaluate`, and `decisions.propose` |
+| Local MCP server | Exposes `ipso mcp` with `decisions.applicable`, `decisions.get`, `decisions.health`, `decisions.verifiability`, `checks.evaluate`, and `decisions.propose` |
 
-The hook decides on this machine with no LLM and sends nothing anywhere. It gives no answer on a clean edit, so your own permission rules still apply. It only acts in a repository with an `.ipso` directory, so run `ipso init` first.
+### Using a signed policy bundle
 
-To use a signed policy bundle instead of the local build, set `bundle_dir`, `bundle_digest`, and `bundle_key` when you enable the plugin.
-
-A missing `ipso` binary makes the hook fail open with a notice, because Claude Code treats that as a non-blocking error. CI remains the gate. The hook is a guard for a cooperating agent and not a sandbox, so a shell command can hide what it touches.
+By default, the plugin evaluates your local `.ipso/build` output. To evaluate a signed OCI policy bundle instead, set `bundle_dir`, `bundle_digest`, and `bundle_key` when enabling the plugin.
 
 ## Codex, Copilot, Cursor, and Kiro
 
-Each directory under `agents/` holds that agent's hook file at the path it belongs. Copy it into your repository and install `ipso` so it is on `PATH`.
+Each subdirectory under `agents/` contains that agent's hook file at its expected repository path. Copy the file into your repository and make sure `ipso` is installed on `PATH`.
 
-| Agent | File | Before it runs |
+| Agent | Hook file to copy | Extra setup |
 | --- | --- | --- |
-| Codex | `agents/codex/.codex/hooks.json` | Trust the project, and review the hooks with `/hooks` |
-| Copilot | `agents/copilot/.github/hooks/ipso.json` | The cloud agent needs `ipso` from its setup steps, or every tool call stops |
-| Cursor | `agents/cursor/.cursor/hooks.json` | Nothing |
-| Kiro | `agents/kiro/.kiro/hooks/ipso.json` | Nothing |
+| Codex | [`agents/codex/.codex/hooks.json`](agents/codex/.codex/hooks.json) | Trust the project and review hooks with `/hooks` |
+| Copilot | [`agents/copilot/.github/hooks/ipso.json`](agents/copilot/.github/hooks/ipso.json) | For Copilot cloud agent, install `ipso` in setup steps or every tool call stops |
+| Cursor | [`agents/cursor/.cursor/hooks.json`](agents/cursor/.cursor/hooks.json) | None |
+| Kiro | [`agents/kiro/.kiro/hooks/ipso.json`](agents/kiro/.kiro/hooks/ipso.json) | None |
 
-What each agent can enforce differs. With v0.4.0, each of these four stopped a violating edit in a live session, and the Copilot cloud agent has not been tried. [`docs/hooks.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md) has the enforcement level per agent and the PR check that remains the gate. The MCP server setup is in [`docs/mcp.md`](https://github.com/ipsofacto-io/ipso/blob/main/docs/mcp.md).
+For MCP server setup across agents, see the [ipso MCP guide](https://github.com/ipsofacto-io/ipso/blob/main/docs/mcp.md).
+
+## How enforcement works
+
+- **100% local and deterministic:** Hooks evaluate compiled rules on your machine with no LLM calls and no outbound network traffic.
+- **Non-intrusive on clean edits:** Hooks return no decision when an edit passes, so your own permission rules remain in effect.
+- **Repository-scoped:** Hooks only activate in repositories that contain an `.ipso` directory (created by `ipso init`).
+- **Guardrail, not a sandbox:** Each agent enforces hooks differently (and shell commands can obscure touched files). In Claude Code, a missing `ipso` binary fails open with a notice. Always keep CI checks as your required merge gate.
+
+Live enforcement was verified with `ipso` v0.4.0 in Claude Code, Codex, Copilot CLI, Cursor, and Kiro (the Copilot cloud agent has not been live-tested yet). See [ipso hooks documentation](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md) for the exact enforcement matrix per agent.
 
 ## License
 
@@ -56,4 +60,4 @@ Copyright 2026 Luca Bertelli.
 
 ## Contributing
 
-Follow the contributor terms in [ipsofacto-io/.github](https://github.com/ipsofacto-io/.github/blob/main/CONTRIBUTING.md). Commits need a `Signed-off-by` trailer (`git commit -s`).
+Follow the contributor guidelines in [ipsofacto-io/.github](https://github.com/ipsofacto-io/.github/blob/main/CONTRIBUTING.md). All commits require a `Signed-off-by` trailer (`git commit -s`).
