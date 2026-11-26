@@ -28,7 +28,7 @@ claude plugin install ipso@ipso
 
 ### Using a signed policy bundle
 
-By default, the plugin evaluates your local `.ipso/build` output. To evaluate a signed OCI policy bundle instead, set `bundle_dir`, `bundle_digest`, and `bundle_key` when enabling the plugin.
+By default, the plugin evaluates your local `.ipso/build` output. To evaluate a signed OCI policy bundle instead, set `bundle_dir`, `bundle_digest`, and `bundle_key` when enabling the plugin. With a signed bundle enabled, `SessionStart` skips `ipso compile` and `Stop` does not run local engine sweeps (`semgrep`, `depcruise`, etc.), because those read `.ipso/build` (see [ipso hooks documentation](https://github.com/ipsofacto-io/ipso/blob/main/docs/hooks.md)).
 
 ## Codex, Copilot, Cursor, and Kiro
 
